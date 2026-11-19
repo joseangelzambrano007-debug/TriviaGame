@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Trivia Digital de Halloween</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header class="site-header">
+        <h1 class="site-title font-creepster">Halloween Digital Trivia Game</h1>
+        <p class="site-subtitle">Proyecto de Inglés: Gramática, Trivia y Herramientas Digitales</p>
+    </header>
+
+    <!-- Contenedor principal -->
+    <main class="main-card">
+
+        <!-- Pantalla de bienvenida -->
+        <section id="welcome-screen" class="screen screen--center">
+            <div class="icon-badge">
+                <svg class="pumpkin-svg" width="180" height="180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Calabaza de Halloween">
+  <path d="M60 30 C26 30 14 48 14 70 C14 94 32 108 60 108 C88 108 106 94 106 70 C106 48 94 30 60 30 Z" fill="#f97316" stroke="#c2410c" stroke-width="3"/>
+  <path d="M42 32 C30 50 30 92 42 107" fill="none" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M78 32 C90 50 90 92 78 107" fill="none" stroke="#c2410c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M60 30 C60 30 60 36 60 36" fill="none" stroke="#c2410c" stroke-width="3"/>
+  <rect x="53" y="12" width="14" height="20" rx="5" fill="#65a30d" stroke="#3f6212" stroke-width="2"/>
+  <path d="M66 16 C78 10 84 16 86 22" fill="none" stroke="#65a30d" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="36,56 52,56 44,70" fill="#fde047"/>
+  <polygon points="68,56 84,56 76,70" fill="#fde047"/>
+  <polygon points="57,76 63,76 60,84" fill="#fde047"/>
+  <polygon points="34,88 86,88 78,98 70,90 60,100 50,90 42,98" fill="#fde047"/>
+</svg>
+            </div>
+
+            <h2 class="welcome-title">¡Bienvenido al Desafío!</h2>
+
+            <p class="welcome-text">
+                Demuestra tus habilidades en inglés poniendo a prueba tu conocimiento sobre Halloween, reglas de <strong>Presente Simple</strong>, <strong>adverbios de frecuencia</strong> y <strong>preposiciones de tiempo</strong>. Además, utiliza herramientas como Adobe Photoshop, Illustrator, Excel, Sublime Text y Word para desarrollar tu proyecto.
+            </p>
+
+            <div class="tools-bar">
+                <p class="tools-bar__label">Herramientas y Logos de la Actividad</p>
+                <ul class="tools-list">
+                    <li class="tag tag--blue">🎨 Adobe Photoshop</li>
+                    <li class="tag tag--amber">✒️ Adobe Illustrator</li>
+                    <li class="tag tag--emerald">📊 Microsoft Excel</li>
+                    <li class="tag tag--purple">💻 Sublime Text</li>
+                    <li class="tag tag--sky">📝 Microsoft Word</li>
+                </ul>
+            </div>
+
+            <div>
+                <button class="btn btn--wide" id="start-btn">Comenzar Trivia (15 Preguntas)</button>
+            </div>
+        </section>
+
+        <!-- Pantalla de preguntas -->
+        <section id="quiz-screen" class="screen hidden">
+            <div class="quiz-header">
+                <span id="question-counter">Pregunta 1 de 15</span>
+                <span id="score-badge" class="score-badge">Puntuación: 0</span>
+            </div>
+
+            <div class="question-block">
+                <h3 id="question-text" class="question-text"></h3>
+                <p id="hint-text" class="hint-text"></p>
+            </div>
+
+            <div id="options-container" class="options-grid"></div>
+
+            <div id="feedback-box" class="feedback hidden"></div>
+
+            <div class="btn-row">
+                <button id="next-btn" class="btn btn--small hidden">Siguiente Pregunta</button>
+            </div>
+        </section>
+
+        <!-- Pantalla de resultados -->
+        <section id="results-screen" class="screen screen--center hidden">
+            <div class="icon-badge">
+                <img src="img/trofeo.svg" alt="Trofeo" onerror="this.onerror=null;this.outerHTML='<span class=&quot;img-fallback&quot;>🏆</span>'">
+            </div>
+
+            <h2 class="results-title">¡Trivia Completada!</h2>
+            <p id="final-score-text" class="final-score"></p>
+
+            <p class="results-text">
+                Excelente trabajo aplicando gramática en inglés, analizando contenido de Halloween y utilizando herramientas como Photoshop, Illustrator, Excel, Sublime Text y Word.
+            </p>
+
+            <div>
+                <button class="btn" id="restart-btn">Jugar de Nuevo</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="site-footer">
+        <img class="footer-bat" src="img/murcielago.svg" alt="" onerror="this.onerror=null;this.outerHTML='<span class=&quot;img-fallback&quot;>🦇</span>'">
+        Halloween Digital Trivia Game &bull; English Project Integration
+        <img class="footer-bat" src="img/murcielago.svg" alt="" onerror="this.onerror=null;this.outerHTML='<span class=&quot;img-fallback&quot;>🦇</span>'">
+    </footer>
+
+    <script>
+        const quizData = [
+            {
+                questionNumber: 1,
+                question: "She always ______ horror movies in October.",
+                answerOptions: [
+                    { text: "watches", isCorrect: true, rationale: "Se usa 'watches' porque el sujeto es tercera persona del singular ('She') en presente simple afirmativo." },
+                    { text: "watch", isCorrect: false, rationale: "'Watch' se utiliza para primera, segunda persona y plurales, no para 'She'." },
+                    { text: "watching", isCorrect: false, rationale: "El gerundio 'watching' requiere un verbo auxiliar 'to be' para formar el presente continuo." },
+                    { text: "watched", isCorrect: false, rationale: "'Watched' corresponde al tiempo pasado simple, no al presente habitual." }
+                ],
+                hint: "Piensa en la regla de la tercera persona del singular en presente simple.",
+                tags: ["present_simple", "grammar"]
+            },
+            {
+                questionNumber: 2,
+                question: "They ______ haunted houses on weekdays.",
+                answerOptions: [
+                    { text: "don't visit", isCorrect: true, rationale: "En presente simple negativo con 'They', se utiliza el auxiliar 'don't' seguido del verbo en forma base." },
+                    { text: "doesn't visit", isCorrect: false, rationale: "'Doesn't' es el auxiliar exclusivo para terceras personas del singular (he, she, it)." },
+                    { text: "not visit", isCorrect: false, rationale: "Falta el verbo auxiliar 'do/does' para estructurar la negación correctamente." },
+                    { text: "aren't visit", isCorrect: false, rationale: "No se combina el verbo to be conjugado con un verbo principal en forma base de esta manera." }
+                ],
+                hint: "Usa el auxiliar negativo correcto para el pronombre 'They'.",
+                tags: ["present_simple", "negative"]
+            },
+            {
+                questionNumber: 3,
+                question: "______ you celebrate Halloween with your friends?",
+                answerOptions: [
+                    { text: "Do", isCorrect: true, rationale: "Para formar preguntas en presente simple con el pronombre 'you', se inicia con el auxiliar 'Do'." },
+                    { text: "Does", isCorrect: false, rationale: "'Does' se reserva únicamente para sujetos en tercera persona del singular." },
+                    { text: "Are", isCorrect: false, rationale: "'Are' se emplea para preguntas con el verbo to be o presente continuo, no con verbos de acción simple." },
+                    { text: "Is", isCorrect: false, rationale: "'Is' es el verbo to be para tercera persona del singular." }
+                ],
+                hint: "Elige el auxiliar interrogativo adecuado para 'you'.",
+                tags: ["present_simple", "interrogative"]
+            },
+            {
+                questionNumber: 4,
+                question: "Choose the correct sentence using an adverb of frequency:",
+                answerOptions: [
+                    { text: "They usually go trick or treating.", isCorrect: true, rationale: "El adverbio de frecuencia ('usually') se coloca antes del verbo principal ('go')." },
+                    { text: "They go usually trick or treating.", isCorrect: false, rationale: "El adverbio de frecuencia está mal ubicado después del verbo principal." },
+                    { text: "Usually they go trick or.", isCorrect: false, rationale: "La estructura carece de sentido completo al cortar la frase final." },
+                    { text: "They go trick or treating usually.", isCorrect: false, rationale: "Colocar el adverbio al final de esta estructura rompe la regla gramatical estándar." }
+                ],
+                hint: "Los adverbios de frecuencia van antes del verbo principal.",
+                tags: ["adverbs_of_frequency"]
+            },
+            {
+                questionNumber: 5,
+                question: "Which sentence correctly places the frequency adverb 'never'?",
+                answerOptions: [
+                    { text: "She never eats spooky candy.", isCorrect: true, rationale: "El adverbio 'never' se ubica correctamente entre el sujeto y el verbo principal." },
+                    { text: "She eats never spooky candy.", isCorrect: false, rationale: "Colocar 'never' después del verbo principal es incorrecto en inglés estándar." },
+                    { text: "Never she eats spooky candy.", isCorrect: false, rationale: "Iniciar con 'never' requiere una inversión gramatical que no aplica aquí." },
+                    { text: "She eats spooky candy never.", isCorrect: false, rationale: "Ubicación errónea al final de la oración." }
+                ],
+                hint: "Recuerda la posición del adverbio antes del verbo.",
+                tags: ["adverbs_of_frequency"]
+            },
+            {
+                questionNumber: 6,
+                question: "Halloween is ______ October 31st.",
+                answerOptions: [
+                    { text: "on", isCorrect: true, rationale: "Se utiliza la preposición 'on' para días específicos de la semana y fechas concretas." },
+                    { text: "in", isCorrect: false, rationale: "'In' se reserva para meses, años, estaciones o periodos largos." },
+                    { text: "at", isCorrect: false, rationale: "'At' se emplea para horas específicas del día." },
+                    { text: "by", isCorrect: false, rationale: "'By' indica límite de tiempo o medio, no una fecha fija." }
+                ],
+                hint: "Piensa en qué preposición acompaña a una fecha exacta.",
+                tags: ["prepositions_of_time"]
+            },
+            {
+                questionNumber: 7,
+                question: "The costume party starts ______ night.",
+                answerOptions: [
+                    { text: "at", isCorrect: true, rationale: "La expresión temporal fija 'at night' requiere el uso de la preposición 'at'." },
+                    { text: "in", isCorrect: false, rationale: "Usar 'in' cambiaría la regla para partes del día (excepto en 'in the morning/evening')." },
+                    { text: "on", isCorrect: false, rationale: "'On' se usa para días específicos, no para la noche general." },
+                    { text: "by", isCorrect: false, rationale: "'By' no corresponde a esta expresión temporal idiomática." }
+                ],
+                hint: "Recuerda la excepción para la noche ('night').",
+                tags: ["prepositions_of_time"]
+            },
+            {
+                questionNumber: 8,
+                question: "Spooky storytelling festivals take place ______ autumn.",
+                answerOptions: [
+                    { text: "in", isCorrect: true, rationale: "Se utiliza 'in' para estaciones del año como el otoño (autumn)." },
+                    { text: "on", isCorrect: false, rationale: "'On' se descarta porque no es una fecha o día específico." },
+                    { text: "at", isCorrect: false, rationale: "'At' se usa para horas exactas, no para estaciones completas." },
+                    { text: "by", isCorrect: false, rationale: "'By' no cumple la función de marcar una estación temporal." }
+                ],
+                hint: "Las estaciones del año usan la preposición para meses y años.",
+                tags: ["prepositions_of_time"]
+            },
+            {
+                questionNumber: 9,
+                question: "What is a carved pumpkin with a candle inside called?",
+                answerOptions: [
+                    { text: "Jack-o'-lantern", isCorrect: true, rationale: "Es el nombre tradicional que recibe la calabaza tallada iluminada en Halloween." },
+                    { text: "Ghost lantern", isCorrect: false, rationale: "Es un término inventado que no corresponde al vocabulario tradicional." },
+                    { text: "Spooky gourd", isCorrect: false, rationale: "Aunque gourd significa calabaza silvestre, no es el nombre oficial del farol." },
+                    { text: "Witch beacon", isCorrect: false, rationale: "No existe esta denominación en las tradiciones de Halloween." }
+                ],
+                hint: "Tiene el nombre de una leyenda tradicional con una linterna.",
+                tags: ["vocabulary"]
+            },
+            {
+                questionNumber: 10,
+                question: "Which ancient Celtic festival is considered the precursor to Halloween?",
+                answerOptions: [
+                    { text: "Samhain", isCorrect: true, rationale: "Samhain marcaba el fin de la cosecha celta y el año nuevo, dando origen a la festividad." },
+                    { text: "Walpurgis", isCorrect: false, rationale: "Es una festividad germánica primaveral de brujas, no el origen celta de Halloween." },
+                    { text: "Saturnalia", isCorrect: false, rationale: "Era una antigua festividad romana dedicada al dios Saturno." },
+                    { text: "Yule", isCorrect: false, rationale: "Yule es una celebración asociada con el solsticio de invierno." }
+                ],
+                hint: "Es una festividad celta antigua de la cosecha.",
+                tags: ["history_and_traditions"]
+            },
+            {
+                questionNumber: 11,
+                question: "Which famous fictional vampire lives in Transylvania?",
+                answerOptions: [
+                    { text: "Count Dracula", isCorrect: true, rationale: "El Conde Drácula es el célebre personaje literario y cinematográfico de Bram Stoker." },
+                    { text: "Frankenstein", isCorrect: false, rationale: "Frankenstein es el científico creador del monstruo artificial, no un vampiro." },
+                    { text: "The Mummy", isCorrect: false, rationale: "La Momia está vinculada al antiguo Egipto, no a Transilvania." },
+                    { text: "Wolfman", isCorrect: false, rationale: "El hombre lobo es una criatura de la mitología europea general." }
+                ],
+                hint: "Creado por Bram Stoker en las tierras de Rumanía.",
+                tags: ["famous_characters"]
+            },
+            {
+                questionNumber: 12,
+                question: "In Mexico, what major festival coincides around the same time as Halloween?",
+                answerOptions: [
+                    { text: "Día de los Muertos", isCorrect: true, rationale: "El Día de los Muertos es la celebración tradicional mexicana que honra a los difuntos a principios de noviembre." },
+                    { text: "Carnival", isCorrect: false, rationale: "El carnaval se celebra tradicionalmente antes de la Cuaresma." },
+                    { text: "Inti Raymi", isCorrect: false, rationale: "Es una ceremonia incaica del sol en junio." },
+                    { text: "La Tomatina", isCorrect: false, rationale: "Es una festividad veraniega de batallas de tomates en España." }
+                ],
+                hint: "Celebra la memoria de los ancestros con altares y flores.",
+                tags: ["around_the_world"]
+            },
+            {
+                questionNumber: 13,
+                question: "Which tool is best suited for designing custom digital graphics and logos for your trivia game?",
+                answerOptions: [
+                    { text: "Adobe Photoshop & Illustrator", isCorrect: true, rationale: "Adobe Photoshop e Illustrator son las herramientas profesionales estándar de diseño gráfico y vectorial." },
+                    { text: "Microsoft Excel only", isCorrect: false, rationale: "Excel se utiliza principalmente para hojas de cálculo y análisis de datos, no para diseño artístico." },
+                    { text: "Sublime Text for graphics", isCorrect: false, rationale: "Sublime Text es un editor de código fuente para programación, no un creador de gráficos." },
+                    { text: "Microsoft Word for animations", isCorrect: false, rationale: "Word es un procesador de textos enfocado en documentos escritos." }
+                ],
+                hint: "Piensa en las aplicaciones de diseño creativo de Adobe.",
+                tags: ["digital_tools"]
+            },
+            {
+                questionNumber: 14,
+                question: "What vegetable was originally carved before pumpkins in Ireland and Scotland?",
+                answerOptions: [
+                    { text: "Turnips", isCorrect: true, rationale: "Originalmente se tallaban nabos (turnips) y patatas antes de adoptar la calabaza en América." },
+                    { text: "Cabbages", isCorrect: false, rationale: "Los repollos no se utilizaban para este propósito por su consistencia." },
+                    { text: "Beets", isCorrect: false, rationale: "Aunque la remolacha tiñe de rojo, el nabo era la raíz tradicional usada." },
+                    { text: "Carrots", isCorrect: false, rationale: "Las zanahorias son demasiado estrechas para tallar rostros." }
+                ],
+                hint: "Es una raíz redonda más pequeña que la calabaza.",
+                tags: ["fun_facts_and_myths"]
+            },
+            {
+                questionNumber: 15,
+                question: "Which software tool would you use to write and edit the HTML/CSS/JS code for a custom web trivia game?",
+                answerOptions: [
+                    { text: "Sublime Text", isCorrect: true, rationale: "Sublime Text es un editor de texto avanzado ideal para escribir y depurar código de programación." },
+                    { text: "Adobe Photoshop", isCorrect: false, rationale: "Photoshop procesa imágenes rasterizadas, no código de desarrollo web." },
+                    { text: "Microsoft Excel", isCorrect: false, rationale: "Excel maneja planillas tabulares numéricas." },
+                    { text: "Adobe Illustrator", isCorrect: false, rationale: "Illustrator diseña vectores gráficos, no archivos de código fuente." }
+                ],
+                hint: "Es un editor de texto ligero enfocado en desarrollo de software.",
+                tags: ["digital_tools"]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const el = (id) => document.getElementById(id);
+
+        function shuffle(array) {
+            const copy = [...array];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function showScreen(screenId) {
+            ['welcome-screen', 'quiz-screen', 'results-screen'].forEach(id => {
+                el(id).classList.toggle('hidden', id !== screenId);
+            });
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            showScreen('quiz-screen');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const q = quizData[currentQuestionIndex];
+
+            el('question-counter').textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
+            el('score-badge').textContent = `Puntuación: ${score}`;
+            el('question-text').textContent = q.question;
+            el('hint-text').textContent = q.hint ? `💡 Pista: ${q.hint}` : '';
+
+            const container = el('options-container');
+            container.innerHTML = '';
+
+            shuffle(q.answerOptions).forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span></span>`;
+                btn.querySelector('span').textContent = option.text;
+                btn.addEventListener('click', () => selectOption(option, btn));
+                container.appendChild(btn);
+            });
+
+            el('feedback-box').classList.add('hidden');
+            el('next-btn').classList.add('hidden');
+        }
+
+        function selectOption(selectedOption, selectedBtn) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizData[currentQuestionIndex];
+            const buttons = el('options-container').children;
+
+            // Marcar la respuesta correcta y la incorrecta elegida
+            [...buttons].forEach(btn => {
+                btn.disabled = true;
+                const label = btn.textContent.trim();
+                const option = q.answerOptions.find(o => o.text === label);
+                if (option.isCorrect) {
+                    btn.classList.add('is-correct');
+                } else if (btn === selectedBtn) {
+                    btn.classList.add('is-wrong');
+                }
+            });
+
+            const feedback = el('feedback-box');
+            feedback.classList.remove('hidden', 'feedback--ok', 'feedback--bad');
+
+            if (selectedOption.isCorrect) {
+                score += 10;
+                el('score-badge').textContent = `Puntuación: ${score}`;
+                feedback.classList.add('feedback--ok');
+                feedback.innerHTML = `<strong>¡Correcto!</strong> ${selectedOption.rationale}`;
+            } else {
+                feedback.classList.add('feedback--bad');
+                feedback.innerHTML = `<strong>Incorrecto.</strong> ${selectedOption.rationale}`;
+            }
+
+            el('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            showScreen('results-screen');
+            const maxScore = quizData.length * 10;
+            el('final-score-text').textContent = `Tu Puntuación Final: ${score} / ${maxScore}`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            showScreen('welcome-screen');
+        }
+
+        // Eventos (sin onclick en el HTML)
+        el('start-btn').addEventListener('click', startQuiz);
+        el('next-btn').addEventListener('click', nextQuestion);
+        el('restart-btn').addEventListener('click', restartQuiz);
+    </script>
+</body>
+</html>
